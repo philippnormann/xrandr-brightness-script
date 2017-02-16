@@ -15,7 +15,7 @@ You can identify your display by running the `xrandr` command.
 
 The first display on that list is usually the main display.
 
-## Motivation;
+## Motivation:
 
 My motivation for creating this little script was a problem my friend was having with his new HP Spectre x360 OLED under Linux.
 He wasn't able to adjust the display brightness via the designated brightness keys on his keyboard. So I wrote this script for him and thought maybe others with similar problems could profit from me publishing this.
