@@ -6,14 +6,30 @@ Especially useful for OLED screens that don't have adjustable hardware backlight
 I recommend binding this script to custom keyboard shortcuts for easy accessibility.
 
 ## Usage:
+
+You can run `brightness.sh` to get a usage description and identify connected displays.
+
 ```sh
+$ ./brightness.sh
+Usage: brightness.sh op display [stepsize]
 
-./brightness.sh + eDP1     Increase brightness of eDP1 display by 0.1
-./brightness.sh - eDP1     Decrease brightness of eDP1 display by 0.1
+arguments:
+  op:             - to decrease or + to increase brightness
+  display:        name of a connected display to adjust
+  stepsize:       size of adjustment step (default 0.1)
+
+displays:
+  eDP1:     100.0%  brightness
+  HDMI-0:   100.0%  brightness
+  DVI-D-0:  100.0%  brightness
 ```
-You can identify your display by running the `xrandr` command.
 
-The first display on that list is usually the main display.
+### Examples:
+
+```sh
+$ ./brightness.sh + eDP1     Increase brightness of eDP1 display by 0.1
+$ ./brightness.sh - eDP1     Decrease brightness of eDP1 display by 0.1
+```
 
 ## Motivation:
 
