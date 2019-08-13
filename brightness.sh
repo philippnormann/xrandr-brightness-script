@@ -97,16 +97,13 @@ exec_op() {
 }
 
 if [[ "$1" = '+'  ||  "$1" = '-'  ]] && [[ -n "$2" ]]; then
-    OP=$1; DISP=$2
-    shift; shift
+    OP=$1; DISP=$2; shift; shift
 else
-    display_usage
-    exit 1
+    display_usage; exit 1
 fi
 
 if [[ "$1" =~ ^[0-9]+(.[0-9]+)?$ ]]; then
-    STEPSIZE=$1
-    shift
+    STEPSIZE=$1; shift
 else
     STEPSIZE='0.1'
 fi
@@ -114,27 +111,24 @@ fi
 CURRBRIGHT=$(get_brightness "$DISP")
 if [[ ! "$CURRBRIGHT" =~ ^[0-9]+.[0-9]+$ ]]; then
     echo "Error: Selected display $DISP has no brightness value!"
-    echo
-    list_displays
-    exit 1
+    echo; list_displays; exit 1
 fi
 
 CURRGAMMA=$(get_gamma "$DISP")
 if [[ ! "$CURRGAMMA" =~ ^[0-9].[0-9]:[0-9].[0-9]:[0-9].[0-9]$ ]]; then
     echo "Error: Selected display $DISP has no gamma value!"
-    echo
-    list_displays
-    exit 1
+    echo; list_displays; exit 1
 fi
+
+NEWBRIGHT="$CURRBRIGHT"
+NEWGAMMA="$CURRGAMMA"
 
 if [ "$1" = '--temp' ]; then
     CURRTEMP=$(get_temp_for_gamma "$CURRGAMMA")
     NEWTEMP=$(exec_op "$OP" "$STEPSIZE" "$CURRTEMP")
     NEWGAMMA=$(get_gamma_for_temp "$NEWTEMP")
-    NEWBRIGHT="$CURRBRIGHT"
 else
     NEWBRIGHT=$(exec_op "$OP" "$STEPSIZE" "$CURRBRIGHT")
-    NEWGAMMA="$CURRGAMMA"
 fi
 
 xrandr --output "$DISP" --brightness "$NEWBRIGHT" --gamma "$NEWGAMMA"
