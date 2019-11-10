@@ -73,7 +73,8 @@ display_usage() {
     echo "Usage: $script_name op display [stepsize] [--temp]"
     echo
     echo 'arguments:'
-    echo '  op:             '-' to decrease or '+' to increase brightness'
+    echo '  op:             '-' to decrease or '+' to increase brightness
+                  '=' to reset brightness'
     echo '  display:        name of a connected display to adjust'
     echo '  stepsize:       size of adjustment step (default 0.1)'
     echo '  --temp:         adjusts color temperature instead of brightness'
@@ -92,11 +93,13 @@ exec_op() {
         if [ "$(echo "$NEWVAL < 0.0" | bc)" -eq 1 ]; then
             NEWVAL='0.0'
         fi
+    elif [ "$1" = '=' ]; then
+        NEWVAL='1.0'
     fi
     echo "$NEWVAL"
 }
 
-if [[ "$1" = '+'  ||  "$1" = '-'  ]] && [[ -n "$2" ]]; then
+if [[ "$1" = '+'  ||  "$1" = '-' || "$1" = '=' ]] && [[ -n "$2" ]]; then
     OP=$1; DISP=$2; shift; shift
 else
     display_usage; exit 1
