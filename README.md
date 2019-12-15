@@ -15,6 +15,7 @@ Usage: brightness.sh op display [stepsize] [--temp]
 
 arguments:
   op:             - to decrease or + to increase brightness
+                  = to reset brightness
   display:        name of a connected display to adjust
   stepsize:       size of adjustment step (default 0.1)
   --temp:         adjusts color temperature instead of brightness
@@ -41,6 +42,8 @@ $ ./brightness.sh - eDP1 0.2           Decrease brightness of eDP1 display by 0.
 
 $ ./brightness.sh + eDP1 0.2 --temp    Increase color temperature of eDP1 display by 0.2
 $ ./brightness.sh - eDP1 0.2 --temp    Decrease color temperature of eDP1 display by 0.2
+
+$ ./brightness.sh = eDP1               Reset the brightness to 1
 ```
 ## Motivation:
 
