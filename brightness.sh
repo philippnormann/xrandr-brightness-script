@@ -71,13 +71,14 @@ list_displays() {
 
 display_usage() {
     script_name=$(basename "$0")
-    echo "Usage: $script_name op display [stepsize] [--temp]"
+    echo "Usage: $script_name op display [stepsize|value] [--temp]"
     echo
     echo 'arguments:'
-    echo '  op:             '-' to decrease or '+' to increase brightness
-                  '=' to reset brightness'
+    echo '  op:             '-' to decrease or '+' to increase brightness'
+    echo '                  '=' to set brightness to a specific value'
     echo '  display:        name of a connected display to adjust'
     echo '  stepsize:       size of adjustment step (default 0.1)'
+    echo '  value:          value to set (default 1.0 for brightness, 0.6 for color temperature)'
     echo '  --temp:         adjusts color temperature instead of brightness'
     echo
     list_displays 
@@ -86,15 +87,15 @@ display_usage() {
 exec_op() {
     if [ "$1" = '+' ]; then
         NEWVAL=$(echo "$3 + $2" | bc)
-        if [ "$(echo "$NEWVAL > 1.0" | bc)" -eq 1 ]; then
-            NEWVAL='1.0'
-        fi
     elif [ "$1" = '-' ]; then
         NEWVAL=$(echo "$3 - $2" | bc)
-        if [ "$(echo "$NEWVAL < 0.0" | bc)" -eq 1 ]; then
-            NEWVAL='0.0'
-        fi
     elif [ "$1" = '=' ]; then
+        NEWVAL=$2
+    fi
+    if [ "$(echo "$NEWVAL < 0.0" | bc)" -eq 1 ]; then
+        NEWVAL='0.0'
+    fi
+    if [ "$(echo "$NEWVAL > 1.0" | bc)" -eq 1 ]; then
         NEWVAL='1.0'
     fi
     echo "$NEWVAL"
@@ -107,9 +108,17 @@ else
 fi
 
 if [[ "$1" =~ ^[0-9]+(.[0-9]+)?$ ]]; then
-    STEPSIZE=$1; shift
+    OPVAL=$1; shift
 else
-    STEPSIZE='0.1'
+    if [[ "$OP" = '=' ]]; then
+        if [[ "$1" = '--temp' ]]; then
+            OPVAL='0.6'
+        else
+            OPVAL='1.0'
+        fi
+    else
+        OPVAL='0.1'
+    fi
 fi
 
 CURRBRIGHT=$(get_brightness "$DISP")
@@ -129,10 +138,10 @@ NEWGAMMA="$CURRGAMMA"
 
 if [ "$1" = '--temp' ]; then
     CURRTEMP=$(get_temp_for_gamma "$CURRGAMMA")
-    NEWTEMP=$(exec_op "$OP" "$STEPSIZE" "$CURRTEMP")
+    NEWTEMP=$(exec_op "$OP" "$OPVAL" "$CURRTEMP")
     NEWGAMMA=$(get_gamma_for_temp "$NEWTEMP")
 else
-    NEWBRIGHT=$(exec_op "$OP" "$STEPSIZE" "$CURRBRIGHT")
+    NEWBRIGHT=$(exec_op "$OP" "$OPVAL" "$CURRBRIGHT")
 fi
 
 xrandr --output "$DISP" --brightness "$NEWBRIGHT" --gamma "$NEWGAMMA"
