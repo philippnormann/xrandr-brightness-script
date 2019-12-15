@@ -41,9 +41,9 @@ invert_gamma() {
     inv_r=$(cut -d: -f1 <<< "$1")
     inv_g=$(cut -d: -f2 <<< "$1")
     inv_b=$(cut -d: -f3 <<< "$1")
-    r=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_r")
-    g=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_g")
-    b=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_b")
+    r=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_r" 2>/dev/null)
+    g=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_g" 2>/dev/null)
+    b=$(awk '{printf "%.1f", 1/$1}' <<< "$inv_b" 2>/dev/null)
     echo "$r:$g:$b"
 }
 
