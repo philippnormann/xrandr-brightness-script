@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+set -e
 
 get_display_info() {
-    xrandr --verbose | grep -w "$1" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
+    xrandr --verbose | grep -w "$1 connected" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
 }
 
 # cribbed from redshift, https://github.com/jonls/redshift/blob/master/README-colorramp
