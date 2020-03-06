@@ -2,7 +2,7 @@
 set -e
 
 get_display_info() {
-    stdbuf -o0 xrandr --verbose | grep -m 1 -w "$1 connected" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
+    xrandr --verbose | grep -m 1 -w "$1 connected" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
 }
 
 # cribbed from redshift, https://github.com/jonls/redshift/blob/master/README-colorramp
