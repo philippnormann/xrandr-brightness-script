@@ -58,7 +58,7 @@ get_brightness() {
 list_displays() {
     echo 'displays:'
     displist=''
-    connected=$(stdbuf -o0 xrandr | grep -w connected | cut -f1 -d' ')
+    connected=$(xrandr | grep -w connected | cut -f1 -d' ')
     for display in $connected; do
         brightness=$(get_brightness "$display")
         gamma=$(get_gamma "$display")
