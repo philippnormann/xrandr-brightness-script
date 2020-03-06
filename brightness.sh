@@ -2,7 +2,7 @@
 set -e
 
 get_display_info() {
-    xrandr --verbose | grep -w "$1 connected" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
+    stdbuf -o0 xrandr --verbose | grep -m 1 -w "$1 connected" -A8 | grep "$2" | cut -f2- -d: | tr -d ' '
 }
 
 # cribbed from redshift, https://github.com/jonls/redshift/blob/master/README-colorramp
@@ -58,7 +58,7 @@ get_brightness() {
 list_displays() {
     echo 'displays:'
     displist=''
-    connected=$(xrandr | grep -w connected | cut -f1 -d' ')
+    connected=$(stdbuf -o0 xrandr | grep -w connected | cut -f1 -d' ')
     for display in $connected; do
         brightness=$(get_brightness "$display")
         gamma=$(get_gamma "$display")
